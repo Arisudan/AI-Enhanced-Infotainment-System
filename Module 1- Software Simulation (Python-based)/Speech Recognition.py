@@ -1,33 +1,36 @@
-import speech_recognition as sr
-import pyttsx3
+import cv2
+from deepface import DeepFace
 
-# Initialize engines
-engine = pyttsx3.init()
-recognizer = sr.Recognizer()
+# Start webcam
+cap = cv2.VideoCapture(0)
 
-def speak(text):
-    engine.say(text)
-    engine.runAndWait()
+print("[INFO] Starting webcam... Press 'q' to quit.")
 
-def listen():
-    with sr.Microphone() as source:
-        print("Listening...")
-        audio = recognizer.listen(source)
-        try:
-            command = recognizer.recognize_google(audio)
-            print("You said:", command)
-            return command.lower()
-        except:
-            speak("Sorry, I didn't catch that.")
-            return ""
-
-# Main loop
 while True:
-    cmd = listen()
-    if "play music" in cmd:
-        speak("Playing your favorite track!")
-    elif "navigate home" in cmd:
-        speak("Opening navigation to home.")
-    elif "exit" in cmd:
-        speak("Goodbye!")
+    ret, frame = cap.read()
+    if not ret:
+        print("Failed to grab frame.")
         break
+
+    try:
+        # Analyze emotions (faster model: 'Emotion' backend is 'Fer')
+        result = DeepFace.analyze(frame,
+                                  actions=['emotion'],
+                                  enforce_detection=False,
+                                  detector_backend='opencv')  # Use fast detector
+        emotion = result[0]['dominant_emotion']
+
+        # Display result
+        cv2.putText(frame, f'Emotion: {emotion}', (30, 50),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+
+    except Exception as e:
+        print("Error:", e)
+
+    cv2.imshow('Emotion Detection', frame)
+
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
