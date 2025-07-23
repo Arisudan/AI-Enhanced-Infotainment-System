@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     $('.text').textillate({
         loop: true,
         sync: true,
@@ -8,6 +9,6 @@ $(document).ready(function () {
         out: {
             effect: "bounceOut",
         },
+        });
 
-    })
-});
+    });
