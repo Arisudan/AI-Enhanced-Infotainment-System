@@ -20,4 +20,18 @@ $(document).ready(function () {
         autostart: true,
     });
 
+    // Siri Wave Animation
+     $('.siri-message').textillate({
+        loop: true,
+        sync: true,
+        in: {
+            effect: "fadeInUp",
+            sync: true,
+        },
+        out: {
+            effect: "fadeInDown",
+            sync: true,
+        },
+    });
+
 });
