@@ -9,6 +9,7 @@ $(document).ready(function () {
             effect: "bounceOut",
         },
     });
+
     //Siri Configuration
     var siriWave = new SiriWave({
         container: document.getElementById("siri-container"),
@@ -32,6 +33,13 @@ $(document).ready(function () {
             effect: "fadeInDown",
             sync: true,
         },
+    });
+
+    //Mic Button Click Event   
+    $("#MicBtn").click(function () { 
+        eel.playAssistantSound()
+        $("#Oval").attr("hidden", true);
+        $("#SiriWave").attr("hidden", false);
     });
 
 });
