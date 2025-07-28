@@ -34,3 +34,9 @@ def takecommand():
         return ""
     
     return query.lower()
+
+@eel.expose
+def allCommands():
+
+    query = takecommand()
+    print(query)
