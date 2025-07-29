@@ -1,17 +1,17 @@
 import pyttsx3
 import speech_recognition as sr
 import eel
+
 def speak(text):
     engine = pyttsx3.init('sapi5')
     voices = engine.getProperty('voices')
     engine.setProperty('voice', voices[0].id)
     engine.setProperty('rate', 174)
-    print(voices)
     engine.say(text)
     engine.runAndWait()
 
 
-@eel.expose
+
 def takecommand():
     r = sr.Recognizer()
 
@@ -34,3 +34,15 @@ def takecommand():
         return ""
     
     return query.lower()
+
+@eel.expose
+def allCommands():
+
+    query = takecommand()
+    print(query)
+
+    if "open" in query:
+        from Engine.Features import openCommand
+        openCommand(query)
+    else:
+        print("Not run")
