@@ -1,17 +1,19 @@
 import pyttsx3
 import speech_recognition as sr
 import eel
+import time
 def speak(text):
     engine = pyttsx3.init('sapi5')
     voices = engine.getProperty('voices')
     engine.setProperty('voice', voices[0].id)
     engine.setProperty('rate', 174)
-    print(voices)
+    eel.DisplayMessage(text)
     engine.say(text)
+    eel.receiverText(text)
     engine.runAndWait()
 
 
-@eel.expose
+
 def takecommand():
     r = sr.Recognizer()
 
@@ -28,9 +30,55 @@ def takecommand():
         query = r.recognize_google(audio, language='en-in')
         print(f"User said: {query}")
         eel.DisplayMessage(query)
-        speak(query)
-        eel.ShowHood()
+        time.sleep(2)
     except Exception as e:
         return ""
     
     return query.lower()
+
+@eel.expose
+def allCommands(message=1):
+    
+    if message == 1:
+        query = takecommand()
+        print(query)
+        eel.senderText(query)
+    else:
+        query = message
+        eel.senderText(query)
+        
+    try:
+        
+        if "open" in query:
+            from Engine.Features import openCommand
+            openCommand(query)
+
+        elif "on youtube" in query:
+            from Engine.Features import PlayYoutube
+            PlayYoutube(query)
+        
+        elif "send message" in query or "phone call" in query or "video call" in query:
+            from Engine.Features import findContact, whatsApp
+            flag = ""
+            contact_no, name = findContact(query)
+            if(contact_no != 0):
+
+                if "send message" in query:
+                    flag = 'message'
+                    speak("what message to send")
+                    query = takecommand()
+                    
+                elif "phone call" in query:
+                    flag = 'call'
+                else:
+                    flag = 'video call'
+                    
+                whatsApp(contact_no, query, flag, name)
+        
+        else:
+            print("Not run")
+
+    except:
+        print("Error")
+    
+    eel.ShowHood()

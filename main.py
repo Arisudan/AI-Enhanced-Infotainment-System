@@ -3,11 +3,13 @@ import eel
 
 from Engine.Features import *
 from Engine.command import *
-eel.init('www')
 
-playAssistantSound()
+def start():
 
-os.system('start msedge.exe --app="http://localhost:8000/index.html"')
+    eel.init('www')
 
-eel.start('index.html', mode=None, host='localhost', block=True)
-          
+    playAssistantSound()
+
+    os.system('start msedge.exe --app="http://localhost:8000/index.html"')
+
+    eel.start('index.html', mode=None, host='localhost', block=True)
