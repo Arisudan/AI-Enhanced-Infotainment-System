@@ -76,7 +76,8 @@ def allCommands(message=1):
                 whatsApp(contact_no, query, flag, name)
         
         else:
-            print("Not run")
+            from Engine.Features import geminai
+            geminai(query)
 
     except:
         print("Error")
